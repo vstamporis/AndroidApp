@@ -51,6 +51,8 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polyline;
 
+import java.io.File;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
@@ -131,6 +133,15 @@ public class MainActivity extends AppCompatActivity
 //        AppLog.log(osm.getOAuth().getConsumerSecret());
 //        AppLog.log(osm.getOAuth().getRequestParameters());
 //        logUserInfo();
+    }
+
+    protected void onStop() {
+        super.onStop();
+            try {
+                Class<?> emmaRTClass = Class.forName("com.vladium.emma.rt.RT");
+                Method dumpCoverageMethod = emmaRTClass.getMethod("dumpCoverageData", File.class, boolean.class, boolean.class);
+                dumpCoverageMethod.invoke(null, new File("sdcard/coverage.exec"), false, false);
+            } catch (Exception e) {}
     }
 
     @Override
